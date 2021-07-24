@@ -1,6 +1,7 @@
 package com.sur_pavel.holidaysermons;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
@@ -9,6 +10,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -47,27 +49,32 @@ public class SecondActivity extends AppCompatActivity {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_second);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+        if (navHostFragment != null) {
+            NavController navController = navHostFragment.getNavController();
+            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+            NavigationUI.setupWithNavController(navigationView, navController);
+        } else {
+            Log.e("Second Activity", "navHostFragment: null");
+        }
 
-
-        Data.holiday = GetItemName(savedInstanceState);
+        Data.getInstance().holiday = GetItemName(savedInstanceState);
     }
 
     private String GetItemName(Bundle savedInstanceState) {
         String newString;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                newString= null;
+            if (extras == null) {
+                newString = null;
             } else {
-                newString= extras.getString("item");
+                newString = extras.getString("item");
             }
         } else {
-            newString= (String) savedInstanceState.getSerializable("item");
+            newString = (String) savedInstanceState.getSerializable("item");
         }
-        return  newString;
+        return newString;
     }
 
     @Override

@@ -5,6 +5,15 @@ import java.util.List;
 
 public class Data
 {
+    private static Data instance;
+    private Data(){}
+    public static Data getInstance(){
+        if(instance == null)
+        {
+            return new Data();
+        }
+        return instance;
+    }
     public static List<String> fathers = Arrays.asList(
             "Иоанн Златоуст",
             "Василий Великий",
@@ -42,5 +51,5 @@ public class Data
             "Покров",
             "Введение"
     );
-    public static String holiday;
+    public String holiday;
 }
