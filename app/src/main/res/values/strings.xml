@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">HolidaySermons</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Holiday Sermons</string>
+    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="search_button">Search</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="tab_text_1">Иоанн Златоуст</string>,
+    <string name="tab_text_2">Василий Великий</string>,
+    <string name="tab_text_3">Григорий Богослов</string>,
+    <string name="tab_text_4">Феофан Затворник</string>,
+    <string name="tab_text_5">Иннокентий Херсонский</string>,
+    <string name="tab_text_6">Иоанн Кронштадтский</string>,
+    <string name="tab_text_7">Серафим Чичагов</string>,
+    <string name="tab_text_8">Николай Сербский</string>,
+    <string name="tab_text_9">Лука Войно-Ясенецкий</string>,
+    <string name="tab_text_10">Филарет Московский</string>,
+    <string name="tab_text_11">Филарет Амфитеатров</string>,
+    <string name="tab_text_12">Алексей Мечев</string>,
+    <string name="tab_text_13">Иоанн Шанхайский</string>
+</resources>
