@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HolidaySermons</string>
+    <string name="app_name">Проповеди на праздники</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Выберите праздник</string>
@@ -9,13 +9,13 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_second">SecondActivity</string>
+    <string name="title_activity_second">Выберите святого отца</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Holiday Sermons</string>
     <string name="nav_header_subtitle">Search in Google sermons for Orthodox Holidays</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="search_button">Search</string>
+    <string name="search_button">Поиск</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
@@ -34,4 +34,8 @@
     <string name="tab_text_11">Филарет Амфитеатров</string>,
     <string name="tab_text_12">Алексей Мечев</string>,
     <string name="tab_text_13">Иоанн Шанхайский</string>
+    <string name="search_view">Search</string>
+    <string name="contents">\??</string>
+    <string name="up">up</string>
+    <string name="down">down</string>
 </resources>

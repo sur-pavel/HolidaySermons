@@ -1,13 +1,22 @@
 package com.sur_pavel.holidaysermons.ui.main;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +25,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.sur_pavel.holidaysermons.R;
+import com.sur_pavel.holidaysermons.databinding.ActivitySecondBinding;
 import com.sur_pavel.holidaysermons.databinding.FragmentSecondBinding;
 
 /**
@@ -27,6 +38,7 @@ public class PlaceholderFragment extends Fragment {
     private final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
     private PageViewModel pageViewModel;
     private FragmentSecondBinding binding;
+    private WebView webView;
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -39,6 +51,7 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         pageViewModel = new ViewModelProvider(this).get(PageViewModel.class);
         int index = 1;
         if (getArguments() != null) {
@@ -55,10 +68,10 @@ public class PlaceholderFragment extends Fragment {
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        WebView webView = binding.webView;
+        webView = binding.webView;
         webView.setVerticalScrollBarEnabled(true);
         webView.setHorizontalScrollBarEnabled(true);
-        webView.getSettings().setJavaScriptEnabled(true);
+
         webView.setWebViewClient(new WebViewClient() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -87,6 +100,80 @@ public class PlaceholderFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        super.onCreateOptionsMenu(menu, inflater);
+        final MenuItem searchItem = menu.findItem(R.id.search_bar);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        ActivitySecondBinding activitySecondBinding = ActivitySecondBinding.inflate(getLayoutInflater());
+        View toolbar = activitySecondBinding.appBarSecond.toolbar;
+        ViewGroup.LayoutParams navButtonsParams = new ViewGroup.LayoutParams(toolbar.getHeight()
+                * 2 / 3, toolbar.getHeight() * 2 / 3);
+        Context context = searchView.getContext();
+        Button btnNext = new Button(context);
+        btnNext.setBackground(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24));
+
+        Button btnPrev = new Button(searchView.getContext());
+        btnPrev.setBackground(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_24));
+
+        TextView searchStats = new TextView(searchView.getContext());
+
+        ((LinearLayout) searchView.getChildAt(0)).addView(searchStats);
+        ((LinearLayout) searchView.getChildAt(0)).addView(btnPrev, navButtonsParams);
+        ((LinearLayout) searchView.getChildAt(0)).addView(btnNext, navButtonsParams);
+
+        ((LinearLayout) searchView.getChildAt(0)).setGravity(Gravity.BOTTOM);
+
+        final String[] searchQuery = new String[1];
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchQuery[0] = newText;
+                if (!newText.equals("")) {
+                    webView.findAllAsync(newText);
+                } else {
+                    webView.clearMatches();
+                }
+                return false;
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!searchQuery[0].equals("")) {
+                    webView.findNext(true);
+                }
+            }
+        });
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!searchQuery[0].equals("")) {
+                    webView.findNext(false);
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.search_bar) {
+
+            return true;
+        }
+        return (super.onOptionsItemSelected(item));
     }
 
     @Override

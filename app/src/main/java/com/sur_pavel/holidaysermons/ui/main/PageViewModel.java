@@ -16,7 +16,7 @@ public class PageViewModel extends ViewModel {
                 @Override
                 public String apply(Integer input) {
 
-                    return Data.fathers.get(input - 1) + " +слово на +" + Data.getInstance().holiday;
+                    return Data.fathers.get(input - 1) + " +слово на +" + Data.holiday;
                 }
             }
     );

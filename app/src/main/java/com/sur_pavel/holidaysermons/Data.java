@@ -51,5 +51,5 @@ public class Data
             "Покров",
             "Введение"
     );
-    public String holiday;
+    public static String holiday;
 }

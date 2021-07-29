@@ -2,21 +2,22 @@ package com.sur_pavel.holidaysermons;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.sur_pavel.holidaysermons.databinding.ActivitySecondBinding;
 import com.sur_pavel.holidaysermons.ui.main.SectionsPagerAdapter;
@@ -30,7 +31,7 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivitySecondBinding.inflate(getLayoutInflater());
+            binding = ActivitySecondBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 //TabLayout
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -46,7 +47,7 @@ public class SecondActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_gallery)
                 .setDrawerLayout(drawer)
                 .build();
         NavHostFragment navHostFragment =
@@ -59,7 +60,24 @@ public class SecondActivity extends AppCompatActivity {
             Log.e("Second Activity", "navHostFragment: null");
         }
 
-        Data.getInstance().holiday = GetItemName(savedInstanceState);
+
+        Data.holiday = GetItemName(savedInstanceState);
+        ConfigureNavListView(viewPager);
+    }
+
+    private void ConfigureNavListView(ViewPager viewPager) {
+        ArrayAdapter<String> aa = new ArrayAdapter<>(binding.navListview.getContext(),
+                android.R.layout.simple_list_item_1, Data.fathers);
+        ListView navListview = binding.navListview;
+        navListview.setAdapter(aa);
+        navListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
+                                    long id) {
+
+                viewPager.setCurrentItem((int) id, false);
+            }
+        });
     }
 
     private String GetItemName(Bundle savedInstanceState) {
