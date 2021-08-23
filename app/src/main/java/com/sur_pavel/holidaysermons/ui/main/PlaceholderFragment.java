@@ -176,6 +176,16 @@ public class PlaceholderFragment extends Fragment {
         return (super.onOptionsItemSelected(item));
     }
 
+    public boolean onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

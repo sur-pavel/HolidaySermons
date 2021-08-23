@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,7 +21,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.sur_pavel.holidaysermons.databinding.ActivitySecondBinding;
+import com.sur_pavel.holidaysermons.ui.main.PlaceholderFragment;
 import com.sur_pavel.holidaysermons.ui.main.SectionsPagerAdapter;
+
+import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -108,4 +112,20 @@ public class SecondActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-}
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        boolean handled = false;
+        for(Fragment f : fragmentList) {
+            if(f instanceof PlaceholderFragment) {
+                handled = ((PlaceholderFragment)f).onBackPressed();
+                if(handled) {
+                    break;
+                }
+            }
+        }
+        if(!handled) {
+            super.onBackPressed();
+        }
+    }}
