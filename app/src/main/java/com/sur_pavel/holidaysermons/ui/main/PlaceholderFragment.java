@@ -19,10 +19,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sur_pavel.holidaysermons.R;
@@ -67,44 +65,44 @@ public class PlaceholderFragment extends Fragment {
 
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         webView = binding.webView;
-        webView.setVerticalScrollBarEnabled(true);
-        webView.setHorizontalScrollBarEnabled(true);
+        if (savedInstanceState != null) {
+            webView.restoreState(savedInstanceState.getBundle("webViewState"));
+        } else {
+            webView.setVerticalScrollBarEnabled(true);
+            webView.setHorizontalScrollBarEnabled(true);
 
-        webView.setWebViewClient(new WebViewClient() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                view.loadUrl(request.getUrl().toString());
-                return false;
-            }
-        });
-        binding.forwardArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                webView.goForward();
-            }
-        });
-        binding.backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                webView.goBack();
-            }
-        });
-        pageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                binding.text.setText("св. " + s.replace("+слово на +", ": "));
-                webView.loadUrl(GOOGLE_SEARCH_URL + "?q=" + s + " &num=30");
-            }
-        });
+            webView.setWebViewClient(new WebViewClient() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    view.loadUrl(request.getUrl().toString());
+                    return false;
+                }
+            });
+            binding.forwardArrow.setOnClickListener(view -> webView.goForward());
+            binding.backArrow.setOnClickListener(view -> webView.goBack());
+            pageViewModel.getText().observe(getViewLifecycleOwner(), s -> {
+                if (s != null) {
+                    binding.text.setText(String.format("св. %s", s.replace("+ слово на +", ": ")));
+                    webView.loadUrl(GOOGLE_SEARCH_URL + "?q=" + s + " &num=30");
+                }
+            });
+        }
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle bundle = new Bundle();
+        webView.saveState(bundle);
+        outState.putBundle("webViewState", bundle);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         // Do something that differs the Activity's menu here
         super.onCreateOptionsMenu(menu, inflater);
         final MenuItem searchItem = menu.findItem(R.id.search_bar);
@@ -148,21 +146,15 @@ public class PlaceholderFragment extends Fragment {
             }
         });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!searchQuery[0].equals("")) {
-                    webView.findNext(true);
-                }
+        btnNext.setOnClickListener(v -> {
+            if (!searchQuery[0].equals("")) {
+                webView.findNext(true);
             }
         });
 
-        btnPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!searchQuery[0].equals("")) {
-                    webView.findNext(false);
-                }
+        btnPrev.setOnClickListener(v -> {
+            if (!searchQuery[0].equals("")) {
+                webView.findNext(false);
             }
         });
     }
