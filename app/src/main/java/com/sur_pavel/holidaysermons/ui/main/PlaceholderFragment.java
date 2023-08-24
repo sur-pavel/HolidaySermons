@@ -103,6 +103,7 @@ public class PlaceholderFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
         // Do something that differs the Activity's menu here
         super.onCreateOptionsMenu(menu, inflater);
         final MenuItem searchItem = menu.findItem(R.id.search_bar);
@@ -110,22 +111,24 @@ public class PlaceholderFragment extends Fragment {
 
         ActivitySecondBinding activitySecondBinding = ActivitySecondBinding.inflate(getLayoutInflater());
         View toolbar = activitySecondBinding.appBarSecond.toolbar;
-        ViewGroup.LayoutParams navButtonsParams = new ViewGroup.LayoutParams(toolbar.getHeight()
-                * 2 / 3, toolbar.getHeight() * 2 / 3);
+        ViewGroup.LayoutParams navButtonsParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         Context context = searchView.getContext();
         Button btnNext = new Button(context);
         btnNext.setBackground(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24));
 
         Button btnPrev = new Button(searchView.getContext());
         btnPrev.setBackground(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_24));
+        btnPrev.setLayoutParams(navButtonsParams);
+        btnNext.setLayoutParams(navButtonsParams);
 
         TextView searchStats = new TextView(searchView.getContext());
 
-        ((LinearLayout) searchView.getChildAt(0)).addView(searchStats);
-        ((LinearLayout) searchView.getChildAt(0)).addView(btnPrev, navButtonsParams);
-        ((LinearLayout) searchView.getChildAt(0)).addView(btnNext, navButtonsParams);
-
-        ((LinearLayout) searchView.getChildAt(0)).setGravity(Gravity.BOTTOM);
+        LinearLayout searchLinearLayout = (LinearLayout) searchView.getChildAt(0);
+        searchLinearLayout.addView(searchStats);
+        searchLinearLayout.addView(btnPrev, navButtonsParams);
+        searchLinearLayout.addView(btnNext, navButtonsParams);
+        searchLinearLayout.setGravity(Gravity.BOTTOM);
 
         final String[] searchQuery = new String[1];
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -171,7 +174,7 @@ public class PlaceholderFragment extends Fragment {
     public boolean onBackPressed() {
         if (webView.canGoBack()) {
             webView.goBack();
-        return true;
+            return true;
         }
         else {
             return false;
