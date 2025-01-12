@@ -26,7 +26,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.sur_pavel.holidaysermons.R;
 import com.sur_pavel.holidaysermons.databinding.ActivitySecondBinding;
 import com.sur_pavel.holidaysermons.databinding.FragmentSecondBinding;
-import com.sur_pavel.holidaysermons.ui.main.WebViewService;
+import com.sur_pavel.holidaysermons.srs.services.WebViewService;
+import com.sur_pavel.holidaysermons.srs.services.NavigationService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -39,6 +40,7 @@ public class PlaceholderFragment extends Fragment {
     private FragmentSecondBinding binding;
     private WebView webView;
     private WebViewService webViewService;
+    private NavigationService navigationService;
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -70,14 +72,15 @@ public class PlaceholderFragment extends Fragment {
         webView = binding.webView;
 
         webViewService = new WebViewService(webView);
+        navigationService = new NavigationService(webView);
 
         if (savedInstanceState != null) {
             webView.restoreState(savedInstanceState.getBundle("webViewState"));
         } else {
             webView.setVerticalScrollBarEnabled(true);
             webView.setHorizontalScrollBarEnabled(true);
-            binding.forwardArrow.setOnClickListener(view -> webView.goForward());
-            binding.backArrow.setOnClickListener(view -> webView.goBack());
+            binding.forwardArrow.setOnClickListener(view -> navigationService.goForward());
+            binding.backArrow.setOnClickListener(view -> navigationService.goBack());
             pageViewModel.getText().observe(getViewLifecycleOwner(), s -> {
                 if (s != null) {
                     binding.text.setText(String.format("св. %s", s.replace("+ слово на +", ": ")));
