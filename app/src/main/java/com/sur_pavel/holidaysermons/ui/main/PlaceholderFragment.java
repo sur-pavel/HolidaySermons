@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.sur_pavel.holidaysermons.R;
 import com.sur_pavel.holidaysermons.databinding.ActivitySecondBinding;
 import com.sur_pavel.holidaysermons.databinding.FragmentSecondBinding;
+import com.sur_pavel.holidaysermons.ui.main.WebViewService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -37,6 +38,7 @@ public class PlaceholderFragment extends Fragment {
     private PageViewModel pageViewModel;
     private FragmentSecondBinding binding;
     private WebView webView;
+    private WebViewService webViewService;
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -66,26 +68,20 @@ public class PlaceholderFragment extends Fragment {
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         webView = binding.webView;
+
+        webViewService = new WebViewService(webView);
+
         if (savedInstanceState != null) {
             webView.restoreState(savedInstanceState.getBundle("webViewState"));
         } else {
             webView.setVerticalScrollBarEnabled(true);
             webView.setHorizontalScrollBarEnabled(true);
-
-            webView.setWebViewClient(new WebViewClient() {
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    view.loadUrl(request.getUrl().toString());
-                    return false;
-                }
-            });
             binding.forwardArrow.setOnClickListener(view -> webView.goForward());
             binding.backArrow.setOnClickListener(view -> webView.goBack());
             pageViewModel.getText().observe(getViewLifecycleOwner(), s -> {
                 if (s != null) {
                     binding.text.setText(String.format("св. %s", s.replace("+ слово на +", ": ")));
-                    webView.loadUrl(GOOGLE_SEARCH_URL + "?q=" + s + " &num=30");
+                    webViewService.loadUrl(s);
                 }
             });
         }
@@ -139,12 +135,7 @@ public class PlaceholderFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchQuery[0] = newText;
-                if (!newText.equals("")) {
-                    webView.findAllAsync(newText);
-                } else {
-                    webView.clearMatches();
-                }
+                webViewService.findInWebView(newText);
                 return false;
             }
         });
