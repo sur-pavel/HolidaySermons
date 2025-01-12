@@ -4,9 +4,10 @@ plugins {
 }
 
 android {
+    namespace 'com.sur_pavel.holidaysermons'
     compileSdkVersion 34
     defaultConfig {
-        applicationId "com.example.myapp"
+        applicationId "com.sur_pavel.holidaysermons"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1
